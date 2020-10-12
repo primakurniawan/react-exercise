@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import TodoList from "./components/TodoList";
@@ -10,128 +10,77 @@ import About from "./pages/About";
 import Detail from "./pages/Detail";
 import "./App.css";
 
-class App extends React.Component {
-  state = {
-    todos: [],
-    todosToShow: [],
+const App = () => {
+  const [todos, setTodos] = useState([]);
+  const [todosToShow, setTodosToShow] = useState([]);
+
+  useEffect(() => {
+    setTodosToShow([...todos]);
+  }, [todos]);
+
+  const markComplete = (id) => {
+    setTodos([
+      ...todos.map((e) => {
+        if (e.id == id) e.complete = !e.complete;
+        return e;
+      }),
+    ]);
   };
 
-  markComplete = (id) => {
-    this.setState({
-      todos: [
-        ...this.state.todos.map((e) => {
-          if (e.id == id) e.complete = !e.complete;
-          return e;
-        }),
-      ],
-    });
-  };
-
-  delete = (id) => {
+  const del = (id) => {
     console.log(id);
-    this.setState(
-      {
-        todos: [...this.state.todos.filter((e) => e.id != id)],
-      },
-      () => {
-        this.setState({
-          todosToShow: [...this.state.todos],
-        });
-      }
-    );
+    setTodos([...todos.filter((e) => e.id != id)]);
   };
 
-  addTodo = (todoToAdd) => {
-    this.setState(
+  const addTodo = (todoToAdd) => {
+    console.log("It's work");
+    setTodos([
+      ...todos,
       {
-        todos: [
-          ...this.state.todos,
-          {
-            id: Date.now(),
-            todo: todoToAdd,
-            complete: false,
-          },
-        ],
+        id: Date.now(),
+        todo: todoToAdd,
+        complete: false,
       },
-      () => {
-        this.setState({
-          todosToShow: [...this.state.todos],
-        });
-      }
-    );
+    ]);
+    setTodosToShow([...todos]);
   };
 
-  filterTodo = (todoToSearch, filteredByComplete) => {
-    this.setState({
-      todosToShow: this.state.todos.filter((e) => {
+  const filterTodo = (todoToSearch, filteredByComplete) => {
+    setTodosToShow(
+      todos.filter((e) => {
         if (filteredByComplete == 0) return e;
         else if (filteredByComplete == 1) return e.complete == true;
         else if (filteredByComplete == -1) return e.complete == false;
-      }),
-    });
+      })
+    );
+
     if (todoToSearch != "") {
-      this.setState({
-        todosToShow: this.state.todos.filter((e) =>
-          e.todo.toLowerCase().includes(todoToSearch.trim())
-        ),
-      });
+      setTodosToShow(
+        todos.filter((e) => e.todo.toLowerCase().includes(todoToSearch.trim()))
+      );
     }
   };
 
-  componentDidMount = () => {
-    fetch("./data/todos.json", {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((todos) => {
-        this.setState(
-          {
-            todos,
-          },
-          () => {
-            this.setState({
-              todosToShow: [...this.state.todos],
-            });
-          }
-        );
-      })
-      .catch((e) => console.log(e));
-  };
-
-  useEffect = () => {
-    this.setState(
-      {
-        todosToShow: [...this.state.todos],
-      },
-      []
-    );
-  };
-
-  render() {
-    return (
-      <>
-        <Router>
-          <Header />
-          <Switch>
-            <Route exact path="/">
-              <TodoFilter filterTodo={this.filterTodo} />
-              <TodoList
-                todos={this.state.todosToShow}
-                markComplete={this.markComplete}
-                delete={this.delete}
-              />
-              <TodoAdd addTodo={this.addTodo} />
-            </Route>
-            <Route path="/about" component={About} />
-            <Route path="/detail/:id" component={Detail} />
-          </Switch>
-        </Router>
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <Router>
+        <Header />
+        <Switch>
+          <Route exact path="/">
+            <TodoFilter filterTodo={filterTodo} />
+            <TodoList
+              todos={todosToShow}
+              markComplete={markComplete}
+              delete={del}
+            />
+            <TodoAdd addTodo={addTodo} />
+          </Route>
+          <Route path="/about" component={About} />
+          <Route path="/detail/:id" component={Detail} />
+        </Switch>
+      </Router>
+    </>
+  );
+};
 
 export default App;
