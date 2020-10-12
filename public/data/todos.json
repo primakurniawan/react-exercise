@@ -1,0 +1,17 @@
+[
+  {
+    "id": 0,
+    "todo": "learn react",
+    "complete": false
+  },
+  {
+    "id": 1,
+    "todo": "learn redux",
+    "complete": false
+  },
+  {
+    "id": 3,
+    "todo": "learn xontext api",
+    "complete": false
+  }
+]
