@@ -1,48 +1,55 @@
-import React from "react";
-import PropTypes from "prop-types";
+// import React, { useState, useContext } from "react";
+// import { TodosToShowContext } from "./../TodosContext";
 
-class TodoFilter extends React.Component {
-  state = {
-    todoToSearch: "",
-    filteredByComplete: 0,
-  };
+// const TodoFilter = () => {
+//   const [todosToShow, setTodosToShow] = useContext(TodosToShowContext);
+//   const [todoToSearch, setTodoToSearch] = useState("");
+//   const [filteredByComplete, setFilteredByComplete] = useState(0);
 
-  onChange = (e) => {
-    this.setState(
-      {
-        [e.target.name]: e.target.value,
-      },
-      () => {
-        this.props.filterTodo(
-          this.state.todoToSearch,
-          this.state.filteredByComplete
-        );
-      }
-    );
-  };
+//   const filterTodo = (todoToSearch, filteredByComplete) => {
+//     setTodosToShow(
+//       todosToShow.filter((e) => {
+//         if (filteredByComplete == 0) return e;
+//         else if (filteredByComplete == 1) return e.complete == true;
+//         else if (filteredByComplete == -1) return e.complete == false;
+//       })
+//     );
 
-  render() {
-    return (
-      <>
-        <input
-          type="text"
-          name="todoToSearch"
-          placeholder="Search Todo"
-          onChange={this.onChange}
-          value={this.state.todoToSearch}
-        />
-        <select onChange={this.onChange} name="filteredByComplete">
-          <option value={0}>All</option>
-          <option value={-1}>Not Complete</option>
-          <option value={1}>Complete</option>
-        </select>
-      </>
-    );
-  }
-}
+//     if (todoToSearch != "") {
+//       setTodosToShow(
+//         todosToShow.filter((e) =>
+//           e.todo.toLowerCase().includes(todoToSearch.trim())
+//         )
+//       );
+//     }
+//   };
 
-TodoFilter.propTypes = {
-  filterTodo: PropTypes.func.isRequired,
-};
+//   const onChangeSearch = (e) => {
+//     setTodoToSearch(e.target.value);
+//     filterTodo(todoToSearch, filteredByComplete);
+//   };
 
-export default TodoFilter;
+//   const onChangeFilter = (e) => {
+//     setFilteredByComplete(e.target.value);
+//     filterTodo(todoToSearch, filteredByComplete);
+//   };
+
+//   return (
+//     <>
+//       <input
+//         type="text"
+//         name="todoToSearch"
+//         placeholder="Search Todo"
+//         onChange={onChangeSearch}
+//         value={todoToSearch}
+//       />
+//       <select onChange={onChangeFilter} name="filteredByComplete">
+//         <option value={0}>All</option>
+//         <option value={-1}>Not Complete</option>
+//         <option value={1}>Complete</option>
+//       </select>
+//     </>
+//   );
+// };
+
+// export default TodoFilter;

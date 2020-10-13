@@ -1,42 +1,40 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { useContext, useState } from "react";
 
-class TodoAdd extends React.Component {
-  state = {
-    todoToAdd: "",
+import { TodosContext } from "./../TodosContext";
+
+const TodoAdd = () => {
+  const [todos, setTodos] = useContext(TodosContext);
+  const [todoToAdd, setTodoToAdd] = useState("");
+
+  const onChange = (e) => {
+    setTodoToAdd(e.target.value);
   };
 
-  onChange = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  onSubmit = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    this.props.addTodo(this.state.todoToAdd);
-    this.setState({
-      todoToAdd: "",
-    });
+    setTodos([
+      ...todos,
+      {
+        id: Date.now(),
+        todo: todoToAdd,
+        complete: false,
+      },
+    ]);
+    setTodoToAdd("");
   };
-  render() {
-    return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          type="text"
-          name="todoToAdd"
-          onChange={this.onChange}
-          placeholder="Add Todo"
-          value={this.state.todoToAdd}
-        />
-        <input type="submit" />
-      </form>
-    );
-  }
-}
 
-TodoAdd.propTypes = {
-  addTodo: PropTypes.func.isRequired,
+  return (
+    <form onSubmit={onSubmit}>
+      <input
+        type="text"
+        name="todoToAdd"
+        onChange={onChange}
+        placeholder="Add Todo"
+        value={todoToAdd}
+      />
+      <input type="submit" />
+    </form>
+  );
 };
 
 export default TodoAdd;
