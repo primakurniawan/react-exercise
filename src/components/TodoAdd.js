@@ -1,10 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 
-import { TodosContext } from "./../TodosContext";
+import { useDispatch } from "react-redux";
+import { addTodo } from "./../actions";
 
 const TodoAdd = () => {
-  const [todos, setTodos] = useContext(TodosContext);
   const [todoToAdd, setTodoToAdd] = useState("");
+
+  const dispatch = useDispatch();
 
   const onChange = (e) => {
     setTodoToAdd(e.target.value);
@@ -12,14 +14,13 @@ const TodoAdd = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    setTodos([
-      ...todos,
-      {
+    dispatch(
+      addTodo({
         id: Date.now(),
         todo: todoToAdd,
         complete: false,
-      },
-    ]);
+      })
+    );
     setTodoToAdd("");
   };
 

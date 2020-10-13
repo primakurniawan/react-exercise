@@ -1,11 +1,13 @@
-import React, { useContext } from "react";
-import PropTypes from "prop-types";
+import React from "react";
 import TodoItem from "./TodoItem";
 
-import { TodosContext } from "./../TodosContext";
+import { useSelector, useDispatch } from "react-redux";
+
+import { deleteTodo, markComplete } from "./../actions";
 
 const TodoList = (props) => {
-  const [todos, setTodos] = useContext(TodosContext);
+  const todos = useSelector((state) => state.todos);
+  const dispatch = useDispatch();
 
   const getStyle = () => {
     return {
@@ -13,32 +15,23 @@ const TodoList = (props) => {
     };
   };
 
-  const markComplete = (id) => {
-    setTodos([
-      ...todos.map((e) => {
-        if (e.id == id) e.complete = !e.complete;
-        return e;
-      }),
-    ]);
+  const marking = (id) => {
+    dispatch(markComplete(id));
   };
 
   const del = (id) => {
-    setTodos([...todos.filter((e) => e.id != id)]);
+    dispatch(deleteTodo(id));
   };
   return (
     <ul style={getStyle()}>
       {todos.length === 0 && <li>Please add item</li>}
       {todos.map((e, i) => {
         return (
-          <TodoItem todo={e} key={i} markComplete={markComplete} delete={del} />
+          <TodoItem todo={e} key={i} markComplete={marking} delete={del} />
         );
       })}
     </ul>
   );
-};
-
-TodoList.propTypes = {
-  todos: PropTypes.array.isRequired,
 };
 
 export default TodoList;

@@ -3,13 +3,7 @@ import React, { createContext, useState } from "react";
 export const TodosContext = createContext();
 
 export const TodosProvider = (props) => {
-  const [todos, setTodos] = useState([
-    {
-      id: 1,
-      todo: "wow",
-      complete: false,
-    },
-  ]);
+  const [todos, setTodos] = useState([]);
   return (
     <TodosContext.Provider value={[todos, setTodos]}>
       {props.children}
